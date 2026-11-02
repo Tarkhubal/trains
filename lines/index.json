@@ -175,6 +175,14 @@
       "to": "Blaenau Ffestiniog",
       "lengthKm": 21.736,
       "stations": 11
+    },
+    {
+      "slug": "welsh-highland",
+      "name": "Welsh Highland Railway",
+      "from": "Caernarfon",
+      "to": "Porthmadog Harbour",
+      "lengthKm": 39.302,
+      "stations": 15
     }
   ]
 }
