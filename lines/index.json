@@ -159,6 +159,14 @@
       "to": "Grosmont",
       "lengthKm": 28.656,
       "stations": 5
+    },
+    {
+      "slug": "edinburgh-trams",
+      "name": "Edinburgh Trams",
+      "from": "Edinburgh Airport",
+      "to": "Newhaven",
+      "lengthKm": 18.294,
+      "stations": 23
     }
   ]
 }
