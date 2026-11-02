@@ -219,12 +219,15 @@ export class Train3D {
     // (a mountain line's engine is always below its coach: set off down the hill, it leads)
     if (!this.dir && this.kind === 'rack' && dir < 0) { this.cars.reverse(); this.lens.reverse(); for (const c of this.cars) c.userData.back = !c.userData.back }
     this.dir = dir
+    // (smaller on a narrow gauge line, all of it: line.trainScale)
+    const sc = line.trainScale || 1
     let back = 0
     const f = new THREE.Vector3(), b = new THREE.Vector3()
     this.cars.forEach((c, k) => {
-      const L = this.lens[k]
+      const L = this.lens[k] * sc
       const mid = s - dir * (back + L / 2)
-      back += L + gapOf(this.kind)
+      back += L + gapOf(this.kind) * sc
+      if (c.scale.x !== sc) c.scale.setScalar(sc)
       const h = Math.min(8, L / 2 - 0.5)
       line.pos(mid + dir * h, side, 0, f); line.pos(mid - dir * h, side, 0, b)
       c.position.copy(f).add(b).multiplyScalar(0.5)
@@ -239,8 +242,8 @@ export class Train3D {
     const dd = travelled - this.dist
     this.dist = travelled
     for (const w of this.wheels) {
-      if (w.userData.rod) { w.position.y = 0.95 + Math.sin(travelled / 0.95) * 0.3; continue }
-      const r = w.geometry.parameters?.radiusTop || 0.46
+      if (w.userData.rod) { w.position.y = 0.95 + Math.sin(travelled / (0.95 * sc)) * 0.3; continue }
+      const r = (w.geometry.parameters?.radiusTop || 0.46) * sc
       w.rotation.x += dd / r
       if (w.userData.spokes) w.userData.spokes.rotation.x = w.rotation.x
     }
