@@ -658,15 +658,17 @@ function aim(dt) {
   mapSet = null
   // a seat by the window: in the second carriage, on the side away from the other track, looking out and a little ahead
   if (cam === 'seat') {
-    const mid = clamp(s - d * (follow.len * 0.45), 0, line.length), q = line.pos(mid, follow.side, 2.25), [ux, uz] = line.tangent(mid)
+    // (lower and nearer the glass in a narrow gauge carriage: line.trainScale)
+    const sc = line.trainScale || 1
+    const mid = clamp(s - d * (follow.len * 0.45 * sc), 0, line.length), q = line.pos(mid, follow.side, 2.25 * sc), [ux, uz] = line.tangent(mid)
     const out = follow.dir > 0 ? 1 : -1, nx = uz * out, nz = -ux * out
-    camera.position.set(q.x + nx * 0.9, q.y + Math.sin(follow.travelled / 9) * 0.01, q.z + nz * 0.9)
+    camera.position.set(q.x + nx * 0.9 * sc, q.y + Math.sin(follow.travelled / 9) * 0.01, q.z + nz * 0.9 * sc)
     camera.lookAt(q.x + nx * 40 + ux * d * 18, q.y - 2, q.z + nz * 40 + uz * d * 18)
     seatView?.update(); cabView?.hide()
     return
   }
   seatView?.hide()
-  if (cam === 'cab') { const back = cabView ? -0.9 : 0.5; want.pos.set(p.x + tx * back, p.y + (cabView ? 2.95 : 3.1), p.z + tz * back); want.look.copy(line.pos(clamp(s + d * 80, 0, line.length), follow.side, 2.6)) }
+  if (cam === 'cab') { const sc = line.trainScale || 1, back = (cabView ? -0.9 : 0.5) * sc; want.pos.set(p.x + tx * back, p.y + (cabView ? 2.95 : 3.1) * sc, p.z + tz * back); want.look.copy(line.pos(clamp(s + d * 80, 0, line.length), follow.side, 2.6 * sc)) }
   // (behind the whole train, however long it is: 70 m was behind two cars and over the middle of an express)
   else if (cam === 'chase') { const back = follow.len + 25; want.pos.set(p.x - tx * back + tz0 * 6, p.y + 16, p.z - tz * back - tx0 * 6); want.look.set(p.x + tx * 25, p.y + 2, p.z + tz * 25) }
   else if (cam === 'side') {
