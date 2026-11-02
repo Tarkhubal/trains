@@ -151,6 +151,14 @@
       "to": "Barrow-in-Furness",
       "lengthKm": 55.675,
       "stations": 11
+    },
+    {
+      "slug": "nymr",
+      "name": "North Yorkshire Moors Railway",
+      "from": "Pickering",
+      "to": "Grosmont",
+      "lengthKm": 28.656,
+      "stations": 5
     }
   ]
 }
