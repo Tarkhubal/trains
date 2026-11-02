@@ -167,6 +167,14 @@
       "to": "Newhaven",
       "lengthKm": 18.294,
       "stations": 23
+    },
+    {
+      "slug": "ffestiniog",
+      "name": "Ffestiniog Railway",
+      "from": "Porthmadog Harbour",
+      "to": "Blaenau Ffestiniog",
+      "lengthKm": 21.736,
+      "stations": 11
     }
   ]
 }
