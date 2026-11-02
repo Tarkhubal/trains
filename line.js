@@ -35,6 +35,10 @@ export class Line {
     this.length = this.P[this.P.length - 1].s
     this.step = data.profile.step
     this.speed = meta.speed || 26.8
+    // its gauge in metres, and how big its trains are beside a main line's: on the Ffestiniog's 597 mm a coach is two
+    // metres wide and a little over two and a half high, two thirds of one on 1435 (stock.js, the cab and the seat)
+    this.gauge = (data.gauge || 1435) / 1000
+    this.trainScale = this.gauge > 1.3 ? 1 : 0.45 + 0.55 * this.gauge / 1.435
     // how many tracks, every ten metres: 0 one track, 1 two, eased in and out where a loop opens
     const runs = (meta.tracks || []).filter((r) => r[2] >= 2).map(([a, b]) => [a * 1000, b * 1000])
     const n = Math.ceil(this.length / 10) + 1
@@ -152,10 +156,11 @@ export class Line {
     // (in a tunnel the bed is still drawn; over a bridge it is the deck)
     g.add(this.ribbon(a, b, (s) => this.laneAt(s) - half(s), (s) => this.laneAt(s) + half(s), 0.02, ctx.mats.bed, anchor))
     for (const side of [1, -1]) {
-      for (const r of [-0.72, 0.72]) g.add(this.ribbon(a, b, (s) => this.lateral(s, side) + r - 0.035, (s) => this.lateral(s, side) + r + 0.035, 0.22, ctx.mats.rail, anchor, 5))
+      for (const r of [-0.5, 0.5].map((k) => k * (this.gauge + 0.005))) g.add(this.ribbon(a, b, (s) => this.lateral(s, side) + r - 0.035, (s) => this.lateral(s, side) + r + 0.035, 0.22, ctx.mats.rail, anchor, 5))
     }
     // the sleepers, every metre, on each track (the second only where there is one)
-    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), p = new THREE.Vector3(), one = new THREE.Vector3(1, 1, 1)
+    // (as long as the gauge needs: 2.6 m under a main line's rails)
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), p = new THREE.Vector3(), one = new THREE.Vector3((this.gauge + 1.165) / 2.6, 1, 1)
     const spots = []
     for (let s = a; s < b; s += 1.1) { spots.push([s, 1]); if (this.twoAt(s) > 0.05) spots.push([s, -1]) }
     const sl = new THREE.InstancedMesh(sleeperGeo, ctx.mats.sleeper, spots.length)
