@@ -344,9 +344,11 @@ export class Line {
   }
 
   // ── the land beside it, from the map ───────────────────────────────────────────────────────────────────────────
-  // (written in the line's own flat frame; turned into the shared one here, a 2 km square at a time as it is built)
+  // (written in the line's own flat frame; turned into the shared one here, a 2 km square at a time as it is built.
+  // from the origin the land was fetched against, which it keeps: on 2 Nov land fetched on a desk was shipped for lines
+  // the box fetches again when he picks them, and a line whose relation was edited between the two starts elsewhere)
   addScenery(near, ctx) {
-    const sc = this.scenery, conv = fromLineFrame(this.data.origin), CELL = 2000
+    const sc = this.scenery, conv = fromLineFrame(sc.origin || this.data.origin), CELL = 2000
     const cells = new Map()
     const cell = (x, z) => { const k = `${Math.floor(x / CELL)},${Math.floor(z / CELL)}`; if (!cells.has(k)) cells.set(k, { trees: [], houses: [], rivers: [], places: [] }); return cells.get(k) }
     const t = sc.trees || []
