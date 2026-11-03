@@ -183,6 +183,14 @@
       "to": "Porthmadog Harbour",
       "lengthKm": 39.302,
       "stations": 15
+    },
+    {
+      "slug": "glasgow-south-western",
+      "name": "Glasgow South Western Line",
+      "from": "Glasgow Central",
+      "to": "Carlisle",
+      "lengthKm": 185.461,
+      "stations": 22
     }
   ]
 }
